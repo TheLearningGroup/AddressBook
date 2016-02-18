@@ -1,6 +1,8 @@
 package com.example.muchao.addressbook.camera;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,26 +17,38 @@ import android.widget.Button;
 
 import com.example.muchao.addressbook.R;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by muchao on 16/2/17.
  */
 public class CameraFragment extends Fragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
+    public static final String PHOTO_FILENAME = "photo_file_name";
 
     private Camera mCamera;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
 
+    private Button takePictureBtn;
+
+    private String mFilename;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_camera, parent, false);
-        Button takePictureBtn = (Button) v.findViewById(R.id.camera_takePicture_btn);
+        takePictureBtn = (Button) v.findViewById(R.id.camera_takePicture_btn);
         takePictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mCamera != null) {
+                    mCamera.takePicture(mShutterCallback, null, mPictureCallback);
+                }
+                Intent i = new Intent();
+                i.putExtra(PHOTO_FILENAME, mFilename);
                 getActivity().finish();
             }
         });
@@ -59,6 +73,7 @@ public class CameraFragment extends Fragment {
                     Camera.Parameters parameters = mCamera.getParameters();
                     Camera.Size s = getBestSupportedSize(parameters.getSupportedPreviewSizes(), width, height);
                     parameters.setPreviewSize(s.width, s.height);
+                    parameters.setPictureSize(s.width, s.height);
                     mCamera.setParameters(parameters);
                     try {
                         mCamera.setDisplayOrientation(90);
@@ -105,6 +120,39 @@ public class CameraFragment extends Fragment {
             Log.d(TAG, "initCameraAndPreview: " + e.getMessage());
         }
     }
+
+    private Camera.ShutterCallback mShutterCallback = new Camera.ShutterCallback() {
+        public void onShutter() {
+            // display progress
+        }
+    };
+
+    private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            mFilename = UUID.randomUUID().toString() + ".jpg";
+            FileOutputStream out = null;
+            boolean success = false;
+            try {
+                out = getActivity().openFileOutput(mFilename, Context.MODE_PRIVATE);
+                out.write(data);
+            } catch (Exception e) {
+                Log.e(TAG, "onPictureTaken: ", e);
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "onPictureTaken: ", e);
+                }
+            }
+
+            if (success) {
+                Log.i(TAG, "onPictureTaken: " + mFilename);
+            }
+        }
+    };
 
     @TargetApi(9)
     @Override

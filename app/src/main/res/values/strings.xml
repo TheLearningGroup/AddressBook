@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">AddressBook</string>
+    <string name="app_name">云通讯录</string>
+    <string name="list_title">联系人列表</string>
 
-    <string name="camera_take">Take !</string>
+    <string name="camera_take">拍 !</string>
 </resources>
