@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">云通讯录</string>
-    <string name="list_title">联系人列表</string>
 
-    <string name="camera_take">拍 !</string>
+    <string name="list_title">联系人列表</string>
+    <string name="search_input_box">请输入联系人姓名</string>
+    <string name="search_button">搜!</string>
+
+    <string name="item_title">联系人信息</string>
+    <string name="phone_text">手机</string>
+    <string name="message_btn">短信</string>
+    <string name="call_btn">电话</string>
+    <string name="share_person_btn">共享联系人</string>
+
+    <string name="camera_take">拍!</string>
+
 </resources>

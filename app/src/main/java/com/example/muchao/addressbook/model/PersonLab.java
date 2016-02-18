@@ -3,6 +3,7 @@ package com.example.muchao.addressbook.model;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Created by muchao on 16/2/18.
@@ -28,6 +29,16 @@ public class PersonLab {
             mPersonLab = new PersonLab(appContext);
         }
         return mPersonLab;
+    }
+
+    public Person getPerson(UUID personId) {
+        for (Person person : mPersons
+                ) {
+            if (person.getId().equals(personId)) {
+                return person;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Person> getmPersons() {

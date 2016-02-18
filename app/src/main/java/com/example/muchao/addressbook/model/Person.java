@@ -34,7 +34,7 @@ public class Person {
     }
 
     public String getPhone() {
-        return phone;
+        return phone.toString();
     }
 
     public void setPhone(String phone) {
