@@ -6,6 +6,20 @@
     android:orientation="vertical"
     tools:context=".SplashActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="我是开机动画" />
+
+    <TextView
+        android:id="@+id/countdown_tv"
+        android:layout_gravity="center"
+        android:text="10"
+        android:textSize="200sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <ImageView
         android:id="@+id/splash"
         android:layout_width="match_parent"
