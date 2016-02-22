@@ -51,12 +51,14 @@ public class PersonLab {
             Person person = new Person();
             person.setName("Name #" + i);
             person.setPhone("13310001000");
+            person.changeState();
             mPersons.add(person);
         }
         return true;
     }
 
     public void add(Person person) {
+        person.changeState();
         mPersons.add(person);
     }
 

@@ -1,7 +1,7 @@
 package com.example.muchao.addressbook.camera;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Window;
 import android.view.WindowManager;
 

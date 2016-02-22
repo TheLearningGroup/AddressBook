@@ -3,13 +3,22 @@
 
     <string name="list_title">联系人列表</string>
     <string name="search_input_box">请输入联系人姓名</string>
-    <string name="search_button">搜!</string>
+    <string name="menu_action_delete">删除联系人</string>
+    <string name="menu_action_add">新增联系人</string>
+    <string name="menu_action_search">搜索联系人</string>
+
 
     <string name="item_title">联系人信息</string>
     <string name="phone_text">手机</string>
+    <string name="name_text">姓名</string>
     <string name="message_btn">短信</string>
     <string name="call_btn">电话</string>
     <string name="share_person_btn">共享联系人</string>
+    <string name="save_person_btn">保存</string>
+    <string name="choose_photo_btn">从本地选择</string>
+    <string name="photo_btn">拍!</string>
+    <string name="delete_person_btn">删除联系人</string>
+    <string name="edit_person_btn">编辑联系人</string>
 
     <string name="camera_take">拍!</string>
 

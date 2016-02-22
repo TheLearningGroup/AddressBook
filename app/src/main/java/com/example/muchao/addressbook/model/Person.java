@@ -19,14 +19,16 @@ public class Person {
     private String name;
     private String phone;
     private Date date;
+    private boolean isNew;
 
     public Person() {
         id = UUID.randomUUID();
         date = new Date();
+        isNew = true;
     }
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
     public void setName(String name) {
@@ -52,5 +54,13 @@ public class Person {
         json.put(JSON_PHONE, phone);
         json.put(JSON_DATE, date.getTime());
         return json.toString();
+    }
+
+    public boolean isNew() {
+        return this.isNew == true;
+    }
+
+    public void changeState() {
+        isNew = false;
     }
 }

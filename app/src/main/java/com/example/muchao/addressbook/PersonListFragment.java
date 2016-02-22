@@ -1,18 +1,19 @@
 package com.example.muchao.addressbook;
 
+import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.muchao.addressbook.model.Person;
@@ -29,7 +30,7 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
 
     private ArrayList<Person> mPersons;
 
-    private EditText mSearch_et;
+//    private EditText mSearch_et;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,8 +41,6 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
         ArrayAdapter<Person> adapter = new PersonsListAdapter(mPersons);
         setListAdapter(adapter);
         setHasOptionsMenu(true);
-
-
     }
 
     @Override
@@ -50,33 +49,33 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
 //        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
 //            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 //        }
-        mSearch_et = (EditText) v.findViewById(R.id.search_et);
-        mSearch_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    mSearch_et.setText("");
-                } else {
-                    mSearch_et.setText(R.string.search_input_box);
-                }
-            }
-        });
-        mSearch_et.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchPerson(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//        mSearch_et = (EditText) v.findViewById(R.id.search_et);
+//        mSearch_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    mSearch_et.setText("");
+//                } else {
+//                    mSearch_et.setText(R.string.search_input_box);
+//                }
+//            }
+//        });
+//        mSearch_et.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                searchPerson(s.toString());
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
         return v;
     }
 
@@ -122,8 +121,45 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
 
             mName_tv = (TextView) convertView.findViewById(R.id.name_tv);
             Person person = getItem(position);
-            mName_tv.setText(person.getName());
+            if (person.getName() == null) {
+                mName_tv.setText("");
+            } else {
+                mName_tv.setText(person.getName());
+            }
             return convertView;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_person_list, menu);
+
+        // 搜索框
+        final SearchView searchView = (SearchView) menu.getItem(0).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchPerson(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchPerson(newText);
+                return true;
+            }
+        });
+        // 添加按钮
+        menu.getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Person person = new Person();
+                Intent i = new Intent(getActivity(), PersonActivity.class);
+                i.putExtra(PersonFragment.EXTRA_PERSON_ID, person.getId());
+                startActivity(i);
+                return false;
+            }
+        });
     }
 }

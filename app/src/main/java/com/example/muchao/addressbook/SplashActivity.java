@@ -1,5 +1,6 @@
 package com.example.muchao.addressbook;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,11 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends Activity {
 
     private final static String TAG = SplashActivity.class.getSimpleName();
 
-    private final int SPLASH_DISPLAY_LENGHT = 3; //延迟1秒
+    private final int SPLASH_DISPLAY_LENGHT = 1; //延迟
     private TextView mCountdown_tv;
 
     @Override
