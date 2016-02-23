@@ -12,7 +12,7 @@ public class PersonLab {
     private static final String TAG = PersonLab.class.getSimpleName();
     private static final String FILE_NAME = "persons.json";
 
-    private ArrayList<Person> mPersons;
+    private static ArrayList<Person> mPersons;
 
     private static PersonLab mPersonLab;
     private Context mContext;
@@ -66,4 +66,35 @@ public class PersonLab {
         // TODO need to implement
         return true;
     }
+
+    @Override
+    public ArrayList<Person> clone() {
+        ArrayList<Person> newList = new ArrayList<Person>();
+        for (Person p : mPersons) {
+            Person newPerson = new Person();
+            newPerson.setName(p.getName());
+            newPerson.setPhone(p.getPhone());
+            newPerson.changeState();
+            newList.add(newPerson);
+        }
+
+        return newList;
+    }
+
+    public ArrayList<Person> filter(String s){
+        if (s.equals("")) {
+            return mPersons;
+        }
+        if (mPersons == null || mPersons.size() == 0) {
+            return new ArrayList<Person>();
+        }
+        ArrayList<Person> newList = new ArrayList<Person>();
+        for (Person p : mPersons) {
+            if (p.getName().contains(s)) {
+                newList.add(p);
+            }
+        }
+        return newList;
+    }
+
 }

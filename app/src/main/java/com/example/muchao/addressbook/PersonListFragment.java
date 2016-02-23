@@ -28,7 +28,8 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
     public static final int INTENT_REQUEST_ITEM = 0;
     private static String TAG = PersonListFragment.class.getSimpleName();
 
-    private ArrayList<Person> mPersons;
+    private PersonLab mPersons;
+    private ArrayList<Person> mPersonsList;
 
 //    private EditText mSearch_et;
 
@@ -37,8 +38,11 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.list_title);
 
-        mPersons = PersonLab.getInstance(getActivity().getApplicationContext()).getmPersons();
-        ArrayAdapter<Person> adapter = new PersonsListAdapter(mPersons);
+        mPersons = PersonLab.getInstance(getActivity().getApplicationContext());
+        mPersonsList = new ArrayList<Person>();
+        mPersonsList.addAll(mPersons.clone());
+
+        ArrayAdapter<Person> adapter = new PersonsListAdapter(mPersonsList);
         setListAdapter(adapter);
         setHasOptionsMenu(true);
     }
@@ -94,7 +98,7 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
 
     @Override
     public void onListItemClick(ListView lv, View v, int position, long id) {
-        Person person = mPersons.get(position);
+        Person person = mPersonsList.get(position);
         Intent i = new Intent(getActivity(), PersonActivity.class);
         i.putExtra(PersonFragment.EXTRA_PERSON_ID, person.getId());
         startActivity(i);
@@ -103,6 +107,11 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
     private void searchPerson(String s) {
         // TODO: 16/2/18 search person
         Log.d(TAG, "searchPerson: " + s);
+        ArrayList<Person> persons = mPersons.filter(s);
+        mPersonsList.clear();
+        mPersonsList.addAll(persons);
+
+        ((PersonsListAdapter) getListAdapter()).notifyDataSetChanged();
     }
 
     private class PersonsListAdapter extends ArrayAdapter<Person> {

@@ -16,5 +16,5 @@
         android:icon="@drawable/actionbar_add_icon"/>
     <item
         android:id="@+id/menu_action_list"
-        android:title="list" />
+        android:title="settings" />
 </menu>
