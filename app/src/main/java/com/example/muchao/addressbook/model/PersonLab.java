@@ -49,7 +49,8 @@ public class PersonLab {
         // TODO need to implement
         for (int i = 0; i < 10; i++) {
             Person person = new Person();
-            person.setName("Name #" + i);
+//            person.setName("Name #" + i);
+            person.setName(person.getId().toString());
             person.setPhone("13310001000");
             person.changeState();
             mPersons.add(person);
@@ -72,6 +73,7 @@ public class PersonLab {
         ArrayList<Person> newList = new ArrayList<Person>();
         for (Person p : mPersons) {
             Person newPerson = new Person();
+            newPerson.setId(p.getId());
             newPerson.setName(p.getName());
             newPerson.setPhone(p.getPhone());
             newPerson.changeState();
@@ -81,7 +83,7 @@ public class PersonLab {
         return newList;
     }
 
-    public ArrayList<Person> filter(String s){
+    public ArrayList<Person> filter(String s) {
         if (s.equals("")) {
             return mPersons;
         }

@@ -1,11 +1,15 @@
 package com.example.muchao.addressbook;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +27,7 @@ import java.util.UUID;
  */
 public class PersonFragment extends Fragment implements View.OnClickListener {
     public static final String EXTRA_PERSON_ID = "person_id";
+    private static final String TAG = PersonFragment.class.getSimpleName();
     private Person mPerson;
 
     private TextView mName_tv;
@@ -40,6 +45,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private EditText mPhone_et;
     private Button mChoosePhoto_bt;
     private Button mCatchPhoto_bt;
+
+    MenuItem mSaveMenuItem;
+    MenuItem mEditMenuItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +87,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         mChoosePhoto_bt.setOnClickListener(this);
         mCatchPhoto_bt.setOnClickListener(this);
 
+        mName_et = (EditText) v.findViewById(R.id.name_et);
+        mPhone_et = (EditText) v.findViewById(R.id.phone_et);
+
         if (mPerson.isNew()) {
             initEditView(v);
         } else {
@@ -86,7 +97,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            if (NavUtils.getParentActivityName(getActivity()) != null) {
+                getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         }
         return v;
     }
@@ -114,18 +127,16 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         mPhoto_layout.setVisibility(View.VISIBLE);
         mEdit_layout.setVisibility(View.VISIBLE);
 
-        if (!mPerson.isNew()) {
-            if (mPerson.getName() == null) {
-                mName_et.setText("");
-            } else {
-                mName_et.setText(mPerson.getName());
-            }
+        if (mPerson.getName() == null) {
+            mName_et.setText("");
+        } else {
+            mName_et.setText(mPerson.getName());
+        }
 
-            if (mPerson.getPhone() == null) {
-                mPhone_et.setText("");
-            } else {
-                mPhone_et.setText(mPerson.getPhone());
-            }
+        if (mPerson.getPhone() == null) {
+            mPhone_et.setText("");
+        } else {
+            mPhone_et.setText(mPerson.getPhone());
         }
     }
 
@@ -145,13 +156,59 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
         inflater.inflate(R.menu.fragment_person, menu);
+        mSaveMenuItem = menu.findItem(R.id.menu_action_save);
+        mEditMenuItem = menu.findItem(R.id.menu_action_edit);
         if (mPerson.isNew()) {
-            // 隐藏编辑按钮
-            menu.getItem(1).setVisible(false);
+            mSaveMenuItem.setVisible(true);
+            mEditMenuItem.setVisible(false);
         } else {
-            // 隐藏确定按钮
-            menu.getItem(0).setVisible(false);
+            mSaveMenuItem.setVisible(false);
+            mEditMenuItem.setVisible(true);
         }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) != null) {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+                return true;
+            case R.id.menu_action_edit:
+                Log.d(TAG, "onOptionsItemSelected: edit");
+                if (mSaveMenuItem != null) {
+                    mSaveMenuItem.setVisible(true);
+                }
+                if (mEditMenuItem != null) {
+                    mEditMenuItem.setVisible(false);
+                }
+                initEditView(getView());
+                return true;
+            case R.id.menu_action_save:
+                savePerson();
+                if (mSaveMenuItem != null) {
+                    mSaveMenuItem.setVisible(false);
+                }
+                if (mEditMenuItem != null) {
+                    mEditMenuItem.setVisible(true);
+                }
+                Log.d(TAG, "onOptionsItemSelected: save");
+                initScanView(getView());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void savePerson() {
+        String name = mName_et.getText().toString();
+        String phone = mPhone_et.getText().toString();
+        mPerson.setName(name);
+        mPerson.setPhone(phone);
+        getActivity().setResult(Activity.RESULT_OK);
     }
 }

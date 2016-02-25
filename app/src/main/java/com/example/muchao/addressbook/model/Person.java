@@ -28,6 +28,9 @@ public class Person {
     }
 
     public String getName() {
+        if (name == null) {
+            return "";
+        }
         return name.toString();
     }
 
@@ -36,6 +39,9 @@ public class Person {
     }
 
     public String getPhone() {
+        if (phone == null) {
+            return "";
+        }
         return phone.toString();
     }
 
@@ -45,6 +51,10 @@ public class Person {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String toJSON() throws JSONException {

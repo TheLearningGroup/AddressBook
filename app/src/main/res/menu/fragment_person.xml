@@ -6,8 +6,10 @@
         android:showAsAction="ifRoom"
         android:title="@string/save_person_btn" />
     <item
-        android:id="@+id/menu_action_save"
+        android:id="@+id/menu_action_edit"
         android:icon="@drawable/edit_person"
         android:showAsAction="ifRoom"
         android:title="@string/edit_person_btn" />
+
+
 </menu>

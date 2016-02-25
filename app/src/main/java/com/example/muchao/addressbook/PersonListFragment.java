@@ -101,7 +101,23 @@ public class PersonListFragment extends ListFragment implements View.OnTouchList
         Person person = mPersonsList.get(position);
         Intent i = new Intent(getActivity(), PersonActivity.class);
         i.putExtra(PersonFragment.EXTRA_PERSON_ID, person.getId());
-        startActivity(i);
+        startActivityForResult(i, INTENT_REQUEST_ITEM);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case INTENT_REQUEST_ITEM:
+//                Person person = (Person) data.getSerializableExtra(PersonFragment.EXTRA_PERSON_ID);
+//                mPersonsList.remove(getSelectedItemPosition());
+//                mPersonsList.add(getSelectedItemPosition(), person);
+                mPersonsList.clear();
+                ArrayList<Person> newList = mPersons.getmPersons();
+                mPersonsList.addAll(newList);
+                ((PersonsListAdapter) getListAdapter()).notifyDataSetChanged();
+                break;
+        }
     }
 
     private void searchPerson(String s) {
